@@ -10,3 +10,6 @@ class Agent:
     @property
     def IncreaseMissionComplete(self):
         self.MissionComplete += 1
+
+    def __str__(self):
+        return f'Name: {self.RealName}   Code-Name: {self.CodeName}   Location: {self.Location}   Status: {self.Status}   Missions Complete: {self.MissionComplete}'
