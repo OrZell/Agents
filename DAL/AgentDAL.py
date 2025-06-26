@@ -1,3 +1,5 @@
+from mysql.connector import connect
+
 from MySQL.MySQLServer import MySQLServer
 from Models.Agent import Agent
 
@@ -14,9 +16,31 @@ class AgentDAL:
         connection.commit()
         self.sql.CloseConnection()
 
+    def GetAgentByCodeName(self, codeName:str):
+        self.sql.OpenConnection()
+        connection = self.sql.Connection
+        cur = connection.cursor()
+        cur.execute(f"""SELECT * FROM agents WHERE codeName = {f"{codeName}"}""")
+        agent = cur.fetchall()
 
+        if agent:
+            return agent
+        else:
+            return None
+        self.sql.CloseConnection()
 
-person = Agent('Or', 'Haim', 'Home', 'Alive')
-sql = MySQLServer()
-dal = AgentDAL(sql)
-dal.AddAgent(person)
+    def RemoveAgent(self, agent:Agent):
+        self.sql.OpenConnection()
+        connection = self.sql.Connection
+        cur = connection.cursor()
+        cur.execute(f"""DELETE FROM agents WHERE codeName = {f"{agent.CodeName}"}""")
+        connection.commit()
+        self.sql.CloseConnection()
+
+    def UpdateMissionsCompleted(self, agent:Agent):
+        self.sql.OpenConnection()
+        connection = self.sql.Connection
+        cur = connection.cursor()
+        cur.execute(f"""UPDATE agents SET missionsCompleted = {f"{agent.MissionComplete}"}""")
+        connection.commit()
+        self.sql.CloseConnection()
